@@ -1,121 +1,161 @@
-# NovaNews – News Portal with Puppeteer + Lighthouse
+# NovaNews — Performance-first News Portal
 
-NovaNews is a multi-page, performance-focused news portal built with React, Vite, TypeScript, and Tailwind CSS.  
-It includes a fully automated Puppeteer + Lighthouse performance testing suite and Core Web Vitals budget enforcement.
+NovaNews is a compact, performance-oriented news portal built with React + TypeScript and audited with Lighthouse via Puppeteer. This repository contains the application source, seeded article data, and an automated Lighthouse test harness that enforces Core Web Vitals budgets.
 
-## Tech Stack
+---
 
-- React + TypeScript (Vite)
-- React Router
-- Tailwind CSS
-- Puppeteer + Lighthouse (Node scripts)
+## Quick links
 
-## Core Routes
+- Live preview (local): `http://localhost:3000/articles`
+- Performance reports: `performance-reports/`
+- Tests: `tests/performance/`
 
-- `/articles` – Articles listing page (20+ articles)
-- `/article/:id` – Article detail page
-- `/search` – Search results page
+---
 
-## Required `data-testid` Attributes
+## Contents
 
-### `/articles`
+- `src/` — application source (React + TypeScript + Tailwind)
+- `public/` — static assets
+- `tests/performance/` — Puppeteer + Lighthouse test harness
+- `performance-reports/` — generated Lighthouse JSON reports
+- `package.json` — scripts and dependencies
 
-- `data-testid="articles-list"`
-- `data-testid="search-input"`
-- `data-testid="search-button"`
-- Per article:
-  - `data-testid="article-card-{articleId}"`
-  - `data-testid="article-title-{articleId}"`
-  - `data-testid="article-excerpt-{articleId}"`
-  - `data-testid="article-link-{articleId}"`
+---
 
-All `<img>` tags inside `articles-list` use `loading="lazy"`.
+## Setup
 
-### `/article/:id`
-
-- `data-testid="article-title"`
-- `data-testid="article-author"`
-- `data-testid="article-date"`
-- `data-testid="article-content"`
-- `data-testid="article-featured-image"`
-- `data-testid="back-to-articles"`
-
-### `/search`
-
-- `data-testid="search-results-list"`
-- `data-testid="search-query-display"`
-- `data-testid="results-count"`
-
-## Performance Test Structure
-
-- Directory: `tests/performance`
-  - `lighthouse-articles.test.js`
-  - `lighthouse-detail.test.js`
-
-## Performance Reports
-
-- Directory: `performance-reports`
-  - `articles-lighthouse.json`
-  - `article-detail-lighthouse.json`
-
-These JSON files are generated automatically by the performance tests.
-
-## Single Command to Run App and Tests
-
-From the project root:
+1. Clone the repository
 
 ```bash
-npm run start-and-test
+git clone https://github.com/lohithadamisetti123/News-Portal-Puppeteer-Lighthouse.git
+cd News-Portal-Puppeteer-Lighthouse
 ```
 
-This command will:
+2. Install dependencies
 
-1. Install dependencies (`npm install`)
-2. Build the app in production mode (`npm run build`)
-3. Start the app on `http://localhost:3000` (`npm run start`)
-4. Wait until `http://localhost:3000/articles` is live
-5. Run all performance tests (`npm run test:performance`)
+```bash
+npm install
+```
 
-## Individual Commands (Optional)
+3. Build and preview (production build)
 
-- Development mode:
+```bash
+npm run build
+npm run preview -- --port 3000
+```
 
-  ```bash
-  npm install
-  npm run dev
-  ```
+4. Run the automated performance tests (expects preview server on port 3000)
 
-- Production build + preview:
+```bash
+npm run test:performance
+```
 
-  ```bash
-  npm run build
-  npm run start
-  ```
+---
 
-- Performance tests (requires app already running at port 3000):
+## Development scripts
 
-  ```bash
-  npm run test:performance
-  ```
+- `npm run dev` — start Vite dev server
+- `npm run build` — production build
+- `npm run preview` — preview production build locally
+- `npm run test:performance` — run Lighthouse audits for `/articles` and `/article/1` (uses Puppeteer)
 
-## Performance Budgets Enforced
+---
 
-- Lighthouse Performance Score ≥ 85 (articles & detail)
-- Lighthouse Accessibility Score ≥ 90 (articles & detail)
-- Core Web Vitals on `/articles`:
-  - FCP ≤ 2000 ms
-  - LCP ≤ 2500 ms
-  - CLS ≤ 0.1
-  - TBT ≤ 300 ms
+## Performance Budgets (enforced by tests)
 
-These are checked inside `tests/performance/lighthouse-articles.test.js`.  
-If any budget is violated, the script throws an error and fails.
+- Performance score: >= 85
+- Accessibility: >= 90
+- FCP (First Contentful Paint): <= 2000ms
+- LCP (Largest Contentful Paint): <= 2500ms
+- CLS (Cumulative Layout Shift): <= 0.1
+- TBT (Total Blocking Time): <= 300ms
 
-## Optimizations Implemented
+Detailed budgets are implemented in `tests/performance/lighthouse-articles.test.cjs` and will fail the CI step if violated.
 
-- Vite + production build for minified, tree-shaken JS and CSS
-- Tailwind CSS for utility-based, highly optimized styles
-- Lazy-loaded article images with `loading="lazy"`
-- Reused visual assets and optimized remote image hosting
-- Highly semantic HTML structure and accessible navigation
-- Color contrast and font choices tuned for readability
+---
+
+## Notes on recent fixes
+
+- Removed Preact aliasing to restore compatibility with React Router v7 hooks
+- Replaced external thumbnail requests with inline SVG placeholders to eliminate network image shifts
+- Added explicit layout containment and image aspect ratios to reduce CLS
+- Stabilized route loading to avoid Suspense fallback-induced layout shifts
+
+---
+
+## UI Screenshots
+
+Add screenshots to document the UI and verification steps. Create a folder `docs/screenshots/` and place PNG or JPG images there. The README references the expected files below so that CI and reviewers can quickly find visual proof.
+
+### Recommended screenshot filenames
+
+- `docs/screenshots/articles-page.png` — articles listing (desktop)
+- `docs/screenshots/articles-page-mobile.png` — articles listing (mobile)
+- `docs/screenshots/article-detail.png` — article detail (desktop)
+- `docs/screenshots/article-detail-mobile.png` — article detail (mobile)
+- `docs/screenshots/lighthouse-articles.png` — Lighthouse report summary for `/articles`
+- `docs/screenshots/lighthouse-article-detail.png` — Lighthouse report summary for `/article/1`
+
+### Screenshot placeholders (add your images here)
+
+![Articles page desktop](docs/screenshots/articles-page.png)
+
+![Articles page mobile](docs/screenshots/articles-page-mobile.png)
+
+![Article detail desktop](docs/screenshots/article-detail.png)
+
+![Article detail mobile](docs/screenshots/article-detail-mobile.png)
+
+![Lighthouse - articles](docs/screenshots/lighthouse-articles.png)
+
+![Lighthouse - article detail](docs/screenshots/lighthouse-article-detail.png)
+
+> Tip: If you do not have screenshots yet, create the `docs/screenshots/` folder and add placeholder images or exported Lighthouse .png summaries. CI does not require these images, but they make reviews faster.
+
+---
+
+## CI / Review checklist
+
+- [ ] `npm run build` completes without errors
+- [ ] `npm run test:performance` passes all budgets (Performance >= 85, CLS <= 0.1, etc.)
+- [ ] Screenshots added to `docs/screenshots/`
+- [ ] README updated with any visual or testing notes
+
+---
+
+## How the performance tests work
+
+1. The test harness starts a headless Chromium via Puppeteer and navigates to the page under test (e.g., `/articles`).
+2. Lighthouse is invoked with a fixed emulation and throttling profile appropriate for lab testing.
+3. The Lighthouse JSON output is saved to `performance-reports/` for inspection.
+4. The test script validates metrics against the budgets and returns non-zero exit code when budgets fail.
+
+---
+
+## Troubleshooting
+
+- If `npm run test:performance` fails with a CLS > 0.1, try disabling any route Suspense fallback spinners or ensure images and dynamic content reserve space (explicit `width`/`height` or CSS `aspect-ratio`).
+- If build fails due to PostCSS/Tailwind issues, run `npx tailwindcss -i ./src/index.css -o ./dist/output.css --minify` to surface errors locally.
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Run tests locally and ensure performance budgets pass
+4. Open a Pull Request with screenshots demonstrating passing Lighthouse reports
+
+---
+
+## License
+
+This repository is provided as-is for performance testing demonstrations. No license specified — consult the owner for reuse.
+
+---
+
+## Contact / Owner
+
+Repository: https://github.com/lohithadamisetti123/News-Portal-Puppeteer-Lighthouse
+
+Maintainer: Project owner (see repo)

@@ -1,14 +1,14 @@
 {
   "name": "news-portal-puppeteer-lighthouse",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite preview --host 0.0.0.0 --port 3000",
-    "test:performance": "node tests/performance/lighthouse-articles.test.js && node tests/performance/lighthouse-detail.test.js",
+    "test:performance": "node tests/performance/lighthouse-articles.test.cjs && node tests/performance/lighthouse-detail.test.cjs",
     "start-and-test": "npm install && npm run build && npm run start & wait-on http://localhost:3000/articles && npm run test:performance"
   },
   "dependencies": {

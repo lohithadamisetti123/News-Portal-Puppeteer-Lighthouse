@@ -5,6 +5,8 @@ export interface Article {
   author: string;
   date: string;
   category: string;
+  categoryColor: string;
   image: string;
   content: string;
+  readingTime: number;
 }

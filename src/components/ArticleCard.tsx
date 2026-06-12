@@ -13,11 +13,11 @@ function ArticleCardBase({ article, index = 0 }: Props) {
   return (
     <article
       data-testid={`article-card-${id}`}
-      className={`group shimmer-hover rounded-2xl border border-slate-800/60 bg-gradient-to-br from-slate-900/70 via-slate-900/80 to-slate-950/90 shadow-lg hover:shadow-xl hover:border-amber-400/30 transition-all duration-300 hover:-translate-y-1`}
+      className={`group shimmer-hover overflow-hidden rounded-2xl border border-slate-800/60 bg-gradient-to-br from-slate-900/70 via-slate-900/80 to-slate-950/90 shadow-lg hover:shadow-xl hover:border-amber-400/30 transition-all duration-300 hover:-translate-y-1`}
     >
-      <div className="grid grid-cols-[1fr,1.6fr] h-full">
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr,1.6fr] h-full min-w-0">
         {/* Image */}
-        <div className="relative overflow-hidden rounded-l-2xl" style={{ aspectRatio: '16 / 9' }}>
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-l-2xl min-w-0 aspect-[16/9] sm:aspect-auto sm:h-full">
           <img
             src={image}
             alt={title}
@@ -25,7 +25,7 @@ function ArticleCardBase({ article, index = 0 }: Props) {
             decoding="async"
             width="400"
             height="225"
-            className="h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+            className="absolute inset-0 h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
 
